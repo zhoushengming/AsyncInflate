@@ -10,7 +10,6 @@ public class AsyncInflateItem {
     String inflateKey;
     int layoutResId;
     ViewGroup parent;
-    OnInflateFinishedCallback callback;
     View inflatedView;
 
     private boolean cancelled;
@@ -39,7 +38,6 @@ public class AsyncInflateItem {
 
     public void reset() {
         parent = null;
-        callback = null;
         inflatedView = null;
         cancelled = false;
         inflating = false;

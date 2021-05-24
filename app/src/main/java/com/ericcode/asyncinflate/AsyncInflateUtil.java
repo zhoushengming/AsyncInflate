@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.MutableContextWrapper;
 
 /**
- * @author zoutao
+ * @author zoutao, zsm
  */
 public class AsyncInflateUtil {
     public static void startTask(Application application) {

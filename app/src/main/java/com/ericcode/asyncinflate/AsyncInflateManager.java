@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -16,12 +20,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.UiThread;
-
 /**
- * @author zoutao
+ * @author zoutao, zsm
  * <p>
  * 用来提供子线程inflate view的功能，避免某个view层级太深太复杂，主线程inflate会耗时很长，
  * 实就是对 AsyncLayoutInflater进行了抽取和封装
@@ -70,7 +70,7 @@ public class AsyncInflateManager {
                 if (resultView != null) {
                     //拿到了view直接返回
                     reInflate(context, inflateKey);
-                    replaceContextForView(resultView, context);
+                    replaceContextForView(context, resultView);
                     Log.i("zsm", "bingo~ ");
                     return resultView;
                 }
@@ -86,7 +86,7 @@ public class AsyncInflateManager {
                     resultView = item.inflatedView;
                     if (resultView != null) {
                         reInflate(context, inflateKey);
-                        replaceContextForView(resultView, context);
+                        replaceContextForView(context, resultView);
                         return resultView;
                     }
 
@@ -104,7 +104,7 @@ public class AsyncInflateManager {
      * inflater初始化时是传进来的application，inflate出来的view的context没法用来startActivity，
      * 因此用MutableContextWrapper进行包装，后续进行替换
      */
-    private void replaceContextForView(View inflatedView, Context context) {
+    private void replaceContextForView(Context context, View inflatedView) {
         if (inflatedView == null || context == null) {
             return;
         }
@@ -171,6 +171,7 @@ public class AsyncInflateManager {
     }
 
     private void inflateWithThreadPool(Context context, AsyncInflateItem item) {
+        final MutableContextWrapper contextWrapper = new MutableContextWrapper(context.getApplicationContext());
         mThreadPool.execute(() -> {
             if (!item.isInflating() && !item.isCancelled()) {
                 try {
@@ -181,7 +182,7 @@ public class AsyncInflateManager {
 //                    } catch (InterruptedException e) {
 //                        e.printStackTrace();
 //                    }
-                    item.inflatedView = new BasicInflater(context).inflate(item.layoutResId, item.parent, false);
+                    item.inflatedView = new BasicInflater(contextWrapper).inflate(item.layoutResId, item.parent, false);
                     Log.i("zsm", "async inflate over");
                     onAsyncInflateEnd(item, true);
                 } catch (RuntimeException e) {
