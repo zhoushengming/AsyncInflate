@@ -1,5 +1,6 @@
 package com.ericcode.asyncinflate;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.MutableContextWrapper;
 import android.text.TextUtils;
@@ -49,10 +50,20 @@ public class AsyncInflateManager {
         return sInstance;
     }
 
+    @UiThread
+    public void setContentView(Activity activity, String inflateKey, int layoutResId) {
+        if (activity == null) {
+            return;
+        }
+        View inflatedView
+                = getInflatedView(activity, inflateKey, layoutResId, null, activity.getLayoutInflater());
+        activity.setContentView(inflatedView);
+    }
+
     /**
      * 用来获得异步inflate出来的view
      *
-     * @param context
+     * @param context     context
      * @param layoutResId 需要拿的layoutId
      * @param parent      container
      * @param inflateKey  每一个View会对应一个inflateKey，因为可能许多地方用的同一个 layout，但是需要inflate多个，用InflateKey进行区分

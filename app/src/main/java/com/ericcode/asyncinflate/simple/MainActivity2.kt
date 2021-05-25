@@ -1,16 +1,16 @@
-package com.ericcode.asyncinflate
+package com.ericcode.asyncinflate.simple
 
 import android.content.MutableContextWrapper
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.ericcode.asyncinflate.AsyncInflateManager
 
 class MainActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var inflatedView = AsyncInflateManager
-            .getInstance()
+        var inflatedView = AsyncInflateManager.getInstance()
             .getInflatedView(
                 this,
                 AsyncInflateUtil.InflateKey.KEY_2,

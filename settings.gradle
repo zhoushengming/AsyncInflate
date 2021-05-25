@@ -1,2 +1,3 @@
+include ':asyncinflate'
 include ':app'
 rootProject.name = "AsyncInflate"

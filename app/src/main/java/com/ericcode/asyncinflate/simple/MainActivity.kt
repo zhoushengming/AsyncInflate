@@ -1,4 +1,4 @@
-package com.ericcode.asyncinflate
+package com.ericcode.asyncinflate.simple
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

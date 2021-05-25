@@ -4,7 +4,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * @author zoutao
+ * @author zoutao, zsm
  */
 public class AsyncInflateItem {
     String inflateKey;
